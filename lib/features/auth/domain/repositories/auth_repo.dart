@@ -1,5 +1,5 @@
-import '../../../utils/typedef.dart';
-import '../domain/entities/user.dart';
+import '../../../../utils/typedef.dart';
+import '../entities/user.dart';
 
 abstract class AuthRepo {
   const AuthRepo();
