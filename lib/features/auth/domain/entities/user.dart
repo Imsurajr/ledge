@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class User extends Equatable {
+class User extends Equatable { /// this defines the blueprint of the object that will collect the data in this case user data that comes from server
   const User({
     required this.id,
     required this.createdAt,
