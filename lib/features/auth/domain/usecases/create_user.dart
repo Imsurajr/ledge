@@ -41,6 +41,11 @@ class CreateUserParams extends Equatable {
     required this.name,
     required this.avatar,
   });
+
+  /// this we are creating for reusability for testing and other for not passing the empty params again and again
+  const CreateUserParams.empty() :
+   this(createdAt: '_empty.createdAt', name: '_empty.name', avatar : '_empty.avatark');
+
   final String createdAt;
   final String name;
   final String avatar;
