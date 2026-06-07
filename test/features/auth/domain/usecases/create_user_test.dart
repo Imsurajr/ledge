@@ -4,14 +4,24 @@ import 'package:ledge/features/auth/domain/repositories/auth_repo.dart';
 import 'package:ledge/features/auth/domain/usecases/create_user.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockAuthRepo extends Mock implements AuthRepo {}
+import 'auth_repo.mock.dart';
+
+/* So we wanna ask these questions before writing any test
+ Q1 What does the class depend on - in this case yes on AuthRepo
+ Q2 How can we create a fake/mock version of the dependency - we will create a MockAuthRepo using MockTail
+ Q3 How do we control what our dependency do - using MockTail Apis
+ */
+
+// It will be created like this we have created a reusable version so we are importing it class MockAuthRepo extends Mock implements AuthRepo {}
 
 void main() {
+  // now first we will create AuthRepo and CreateUser's instances as our test class depends on that
   late AuthRepo repo;
   late CreateUser usecase;
 
+  // then we wanna right a setUp where we will direct the calls of the vars that we have declared
   setUp(() {
-    repo = MockAuthRepo();
+    repo = MockAuthRepo(); // we need to instantiate it because it will be used when we will instantiate usecase
     usecase = CreateUser(repo);
   });
 
