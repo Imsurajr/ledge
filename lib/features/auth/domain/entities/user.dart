@@ -13,13 +13,13 @@ class User extends Equatable {
   /// this we are creating for reusability for testing and other for not passing the empty params again and again
   const User.empty()
     : this(
-        id: 1,
+        id: '1',
         createdAt: '_empty.createdAt',
         name: '_empty.name',
         avatar: '_empty.avatar',
       );
 
-  final int id;
+  final String id;
   final String createdAt;
   final String name;
   final String avatar;
