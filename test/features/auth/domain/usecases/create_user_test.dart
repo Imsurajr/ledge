@@ -7,9 +7,9 @@ import 'package:mocktail/mocktail.dart';
 import 'auth_repo.mock.dart';
 
 /* So we wanna ask these questions before writing any test
- Q1 What does the class depend on - in this case yes on AuthRepo
- Q2 How can we create a fake/mock version of the dependency - we will create a MockAuthRepo using MockTail
- Q3 How do we control what our dependency do - using MockTail Apis
+   Q1 What does the class depend on, something that we take in constructor and use - in this case yes on AuthRepo
+   Q2 How can we create a fake/mock version of the dependency - we will create a MockAuthRepo using MockTail
+   Q3 How do we control what our dependency do - using MockTail Apis
  */
 
 // It will be created like this we have created a reusable version so we are importing it class MockAuthRepo extends Mock implements AuthRepo {}
