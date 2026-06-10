@@ -26,5 +26,5 @@ class User extends Equatable {
   // creating variables based on api response
 
   @override
-  List<Object?> get props => [id]; // using equatable to validate if user id is same or not
+  List<Object?> get props => [id, name, avatar]; // using equatable to validate if user id is same or not
 }
