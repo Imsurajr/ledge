@@ -16,10 +16,11 @@ import 'auth_repo.mock.dart';
 
 void main() {
   // now first we will create AuthRepo and CreateUser's instances as our test class depends on that
+  // at start we will write and call the real classes only then in setup we will replace them with the mock versions
   late AuthRepo repo;
   late CreateUser usecase;
 
-  // then we wanna right a setUp where we will direct the calls of the vars that we have declared
+  // then we wanna write a setUp where we will direct the calls of the vars that we have declared
   setUp(() {
     repo = MockAuthRepo(); // we need to instantiate it because it will be used when we will instantiate usecase
     usecase = CreateUser(repo);
@@ -69,12 +70,17 @@ void main() {
        so when we write
        then.Answer((_) async const Right(null))
 
-       so this whole block means whenever someone calls createUser on the repo so we want to give them back a Right() answerk
+       so what to return gets decided like this :
+       if the return type is Either or and have void then for Rights we will expect Right(null)
+       if it is not Either or but void or Future void the we will expect Future.value()
+
+
+       so this whole block means whenever someone calls createUser on the repo so we want to give them back a Right() answer
       */
     ).thenAnswer((_) async => const Right(null));
 
     // Act
-    final res = await usecase(Params); // await is important as we wanna verifyy the test else it will fail
+    final res = await usecase(Params); // await is important as we wanna verify the test else it will fail
 
     /* Assert : so here we actually wanna assert that the Arrange block has been ran or in our use here when the repo.createUser()
     gets called there it returns the Right() data and we also wanna test that it actually Calls which we wrote here
@@ -105,7 +111,9 @@ void main() {
         avatar: Params.avatar,
       ),
     ).called(1);
+    // verifying that the call went and it only went once
 
     verifyNoMoreInteractions(repo);
+    // verifying that there were no more interactions
   });
 }
