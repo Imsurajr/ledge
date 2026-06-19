@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ledge/core/errors/exceptions.dart';
 import 'package:ledge/core/errors/failure.dart';
 import 'package:ledge/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:ledge/features/auth/domain/entities/user.dart';
@@ -23,8 +24,15 @@ class AuthRepoImpl implements AuthRepo {
      2) Should return proper data if there is no failure else Should return failure expected data i.e. if server returns a Failure this should throw exception else it
         should return the actual result
     */
-    await _remoteDataSource.createUser(createdAt: createdAt, name: name, avatar: avatar);
-    return Failure;
+    try {
+      // now we will try to call datasource fro creating user
+      await _remoteDataSource.createUser(
+          createdAt: createdAt, name: name, avatar: avatar);
+      return const Right(null);
+    } on ServerException catch(e) {
+      // if any error we will throw Server Failure
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
   }
 
   @override
