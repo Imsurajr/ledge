@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ledge/core/errors/exceptions.dart';
 import 'package:ledge/core/errors/failure.dart';
 import 'package:ledge/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:ledge/features/auth/data/models/user_model.dart';
 import 'package:ledge/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -128,6 +129,55 @@ void main() {
         ).called(1);
 
         // at the end there should not be any more interactions with the datasource
+        verifyNoMoreInteractions(remoteDataSource);
+      },
+    );
+  });
+
+  /// We will be using Right or Left in return types for the functions that has Either Or format else we will directly return with Right Left
+  /// Now in our case when using right left i.e. Either we have to remember to return in RepoImpl based on the response
+  /// we are getting from RemoteDataSource In RepoImpl it should be try { implementation } on xyzException (which will be coming from remote ds in case of failure) { implementation }
+  group('Tests for getUsers', () {
+
+    const tRes = [UserModel.empty()];
+
+    test(
+      "Should call the [RemoteDataSource.getUsers()] and return the list of Users when call to remote datasource is successful",
+      () async {
+        // Arrange
+        when(() => remoteDataSource.getUsers()).thenAnswer((_) async => (tRes));
+
+        /// this test will also pass if i pass [] in the answer and expect block with some changes but for visibility we are using UserModel.empty's list
+        // when(() => remoteDataSource.getUsers()).thenAnswer((_) async => []);
+
+        // Act
+        final res = await repoImpl.getUsers();
+
+        // Assert
+        expect(res, equals(const Right(tRes)));
+
+        /// changes needed in code in case we are passing empty list
+        // expect(res, isA<Right<dynamic, List<User>>>());
+
+        verify(() => remoteDataSource.getUsers()).called(1);
+
+        verifyNoMoreInteractions(remoteDataSource);
+      },
+    );
+
+    test(
+      'Should return a [ServerFailure] when the call to remote data source is Unsuccessful',
+      () async {
+        // Arrange
+        when(() => remoteDataSource.getUsers()).thenThrow(tException);
+
+        // Act
+        final res = await repoImpl.getUsers();
+
+        // Assert
+        expect(res, equals((Left(ServerFailure.fromException(tException)),)));
+
+        verify(() => remoteDataSource.getUsers()).called(1);
         verifyNoMoreInteractions(remoteDataSource);
       },
     );
