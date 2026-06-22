@@ -3,7 +3,7 @@ import 'package:ledge/features/auth/domain/entities/user.dart';
 import 'package:ledge/utils/typedef.dart';
 
 /*
-    first we are supposed to extend the equity then we are supposed to call parameters through super extended class
+    first we are supposed to extend the entity then we are supposed to call parameters through super extended class
     then we are supposed to write from/to json methods or from/to map
  */
 

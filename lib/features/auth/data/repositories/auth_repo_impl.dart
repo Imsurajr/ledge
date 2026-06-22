@@ -6,6 +6,10 @@ import 'package:ledge/features/auth/domain/entities/user.dart';
 import 'package:ledge/features/auth/domain/repositories/auth_repo.dart';
 import 'package:ledge/utils/typedef.dart';
 
+/// Now in our case when using right left i.e. Either we have to remember to return in RepoImpl based on the response
+/// we are getting from RemoteDataSource In RepoImpl it should be try { implementation } on xyzException (which will be coming from remote ds in case of failure) { implementation }
+
+
 class AuthRepoImpl implements AuthRepo {
   const AuthRepoImpl(this._remoteDataSource);
 
@@ -39,7 +43,11 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   ResultFuture<List<User>> getUsers() async {
-    // TODO: implement getUsers
-    throw UnimplementedError();
+    try {
+      final res = await _remoteDataSource.getUsers();
+      return Right(res); /// we are returning this because if not Failure we will list of users from remote
+    } on ServerException catch(e){
+      return Left(ServerFailure.fromException(e));
+    }
   }
 }
