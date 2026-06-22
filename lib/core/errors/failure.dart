@@ -13,7 +13,7 @@ abstract class Failure extends Equatable {
 class ServerFailure extends Failure {
   const ServerFailure({required super.message, required super.statusCode});
 
-  // creating a reusable constructor for handling server error
+  /// creating a reusable constructor for handling server error
   ServerFailure.fromException(ServerException e)
     : this(message: e.message, statusCode: e.statusCode);
 
