@@ -107,10 +107,13 @@ void main() {
             // left because we are expecting the server failure
             // we will be passing same tException's ServerException message and status code as they should in repo and what server responds
             Left(
-              ServerFailure(
-                message: tException.message,
-                statusCode: tException.statusCode,
-              ),
+              /// now the below code also work but we've created a constant constructor which just requires exception
+              /// to be passed and it will return message and status code for reusability so we will be using that
+              // ServerFailure(
+              //   message: tException.message,
+              //   statusCode: tException.statusCode,
+              // ),
+              ServerFailure.fromException(tException),
             ),
           ),
         );

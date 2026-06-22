@@ -30,8 +30,10 @@ class AuthRepoImpl implements AuthRepo {
           createdAt: createdAt, name: name, avatar: avatar);
       return const Right(null);
     } on ServerException catch(e) {
-      // if any error we will throw Server Failure
-      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+      /// if any error we will throw Server Failure
+      /// now we can return like below also but as this will be used more often we have created a reusable constructor where we just have to pass exception
+      // return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+      return Left(ServerFailure.fromException(e));
     }
   }
 
