@@ -60,6 +60,7 @@ void main() {
         () => client.post(
           /// the client got called at the correct uri
           Uri.parse('$kBaseUrl$kCreateUserEndpoint'),
+
           /// the client got called with the correct data
           body: jsonEncode({
             'createdAt': createdAt,
@@ -76,24 +77,30 @@ void main() {
       'Should throw an [ServerException] when the request to server is not successful with a proper message',
       () async {
         //  Arrange
+        /// we've used theAnswer below and not thenThrow because the server won't be throwing any error instead it will be
+        /// returning the response but with a different status code(400)
         when(
-          () =>  client.post(any(), body: any(named: 'body')),
+          () => client.post(any(), body: any(named: 'body')),
         ).thenAnswer((_) async => http.Response('Invalid Email Address', 400));
-        
+
         // Act
         final methodCall = remoteDataSource.createUser;
-        expect(methodCall(createdAt: createdAt, name: name, avatar: avatar), throwsA(ServerException(message: 'Invalid Email Address', statusCode: 400),),);
+        expect(
+          methodCall(createdAt: createdAt, name: name, avatar: avatar),
+          throwsA(
+            ServerException(message: 'Invalid Email Address', statusCode: 400),
+          ),
+        );
 
         // Assert
         /// so here we are making sure that
         verify(
-              () => client.post(
-            /// the client got called
-            Uri.parse('$kBaseUrl$kCreateUserEndpoint'),
-
+          /// the client got called
+          () => client.post(
             /// the client got called at the correct uri
+            Uri.parse('$kBaseUrl$kCreateUserEndpoint'),
+            /// the client got called with the correct data
             body: jsonEncode({
-              /// the client got called with the correct data
               'createdAt': createdAt,
               'name': name,
               'avatar': avatar,
