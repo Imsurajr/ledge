@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:ledge/core/errors/exceptions.dart';
 import 'package:ledge/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:ledge/features/auth/data/datasources/auth_remote_data_source_impl.dart';
+import 'package:ledge/features/auth/data/models/user_model.dart';
 import 'package:ledge/utils/constants.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -59,7 +60,8 @@ void main() {
         /// the client got called
         () => client.post(
           /// the client got called at the correct uri
-          Uri.parse('$kBaseUrl$kCreateUserEndpoint'),
+          // Uri.parse('$kBaseUrl$kCreateUserEndpoint'),
+          Uri.https(kBaseUrl!, kCreateUserEndpoint),
 
           /// the client got called with the correct data
           body: jsonEncode({
@@ -98,7 +100,9 @@ void main() {
           /// the client got called
           () => client.post(
             /// the client got called at the correct uri
-            Uri.parse('$kBaseUrl$kCreateUserEndpoint'),
+            // Uri.parse('$kBaseUrl$kCreateUserEndpoint'),
+            Uri.https(kBaseUrl!, kCreateUserEndpoint),
+
             /// the client got called with the correct data
             body: jsonEncode({
               'createdAt': createdAt,
@@ -108,6 +112,58 @@ void main() {
           ),
         ).called(1);
 
+        verifyNoMoreInteractions(client);
+      },
+    );
+  });
+
+  group('getUsers', () {
+    const tRes = [UserModel.empty()];
+    const String tMessage = 'Server Error';
+    test('Should return a [List<UserModel] when the status code is 200 ', () async {
+      await dotenv.load(fileName: ".env");
+
+      // Arrange
+      when(() => client.get(any())).thenAnswer(
+        // (_) async => http.Response('Users fetched successfully', 200),
+        /// here (tRes.first.toMap) takes dart (UserModel) and turns into dart Map, ([...]) wraps Map into List
+        /// because endpoint returns list, (jsonEncode(...)) takes that list and make it a String
+        (_) async => http.Response((jsonEncode([tRes.first.toMap()])), 200),
+      );
+
+      // Act
+      final res = await remoteDataSource.getUsers();
+      expect(res, equals(tRes));
+
+      // Assert
+      verify(
+        // () => client.get(Uri.parse('$kBaseUrl$kGetUsersEndpoint')),
+        /// here we are just verifying that the call is made as get and through https to our base url and get endpoint
+        () => client.get(Uri.https(kBaseUrl!, kGetUsersEndpoint)),
+      ).called(1);
+      verifyNoMoreInteractions(client);
+    });
+
+    test(
+      'Should throw an [ServerException] when the status code is not 200k',
+      () async {
+        await dotenv.load(fileName: ".env");
+        // Arrange
+        when(
+          () => client.get(any()),
+        ).thenAnswer((_) async => http.Response(tMessage, 500));
+
+        // Act
+        final methodCall = remoteDataSource.getUsers;
+        expect(
+          () => methodCall(),
+          throwsA(const ServerException(message: tMessage, statusCode: 500)),
+        );
+
+        // Assert
+        verify(
+          () => client.get(Uri.https(kBaseUrl!, kGetUsersEndpoint)),
+        ).called(1);
         verifyNoMoreInteractions(client);
       },
     );
