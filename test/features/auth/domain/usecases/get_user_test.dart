@@ -15,11 +15,11 @@ import 'auth_repo.mock.dart';
 
 void main() {
   late AuthRepo repo;
-  late GetUser usecase;
+  late GetUsers usecase;
 
   setUp(() {
     repo = MockAuthRepo();
-    usecase = GetUser(repo);
+    usecase = GetUsers(repo);
   });
 
   const tRes = [User.empty()];
