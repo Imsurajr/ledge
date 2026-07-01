@@ -10,9 +10,9 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   /// Now if we wanted to make private variables so as we cant take private vars in required we will take
   /// them normally along with initializing them too in constructor then will assign them to private vars
-  AuthBloc({required CreateUser createUser, required GetUser getUser})
+  AuthBloc({required CreateUser createUser, required GetUsers getUsers})
     : _createUser = createUser,
-      _getUser = getUser,
+      _getUsers = getUsers,
       super(const AuthInitial()) {
     // on<AuthEvent>((event, emit) {
     /// this we will be using in case we gotta show something similar on all the Auth Events for example
@@ -23,7 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   final CreateUser _createUser;
-  final GetUser _getUser;
+  final GetUsers _getUsers;
 
   Future<void> _createUserHandler(
     CreateUserEvent event,
@@ -63,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(const GettingUsersState());
-    final res = await _getUser();
+    final res = await _getUsers();
     res.fold(
       (failure) => emit(AuthErrorState(failure.errorMessage)),
       /// for Right here we will be getting the list of users which we will be emitting directly

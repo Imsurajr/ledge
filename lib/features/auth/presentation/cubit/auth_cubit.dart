@@ -7,14 +7,14 @@ import 'package:ledge/features/auth/domain/usecases/get_user.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit({required CreateUser createUser, required GetUser getUser})
+  AuthCubit({required CreateUser createUser, required GetUsers getUsers})
     : _createUser = createUser,
-      _getUser = getUser,
+      _getUsers = getUsers,
       super(AuthInitial());
 
   /// dependencies same as bloc
   final CreateUser _createUser;
-  final GetUser _getUser;
+  final GetUsers _getUsers;
 
   Future<void> createUser({
     /// only difference between an bloc and an cubit is that bloc has events and cubit takes args using method signature
@@ -35,7 +35,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> getUsers() async {
     emit(const GettingUsersState());
-    final res = await _getUser();
+    final res = await _getUsers();
     res.fold(
       (failure) => emit(AuthErrorState(failure.errorMessage)),
       (users) => emit(UsersLoadedState(users)),

@@ -3,8 +3,8 @@ import 'package:ledge/features/auth/domain/repositories/auth_repo.dart';
 import '../../../../utils/typedef.dart';
 import '../entities/user.dart';
 
-class GetUser extends UsecaseWithoutParams<List<User>> {
-  const GetUser(this._repo);
+class GetUsers extends UsecaseWithoutParams<List<User>> {
+  const GetUsers(this._repo);
   final AuthRepo _repo;
 
   @override
