@@ -44,7 +44,7 @@ class CreateUserParams extends Equatable {
 
   /// this we are creating for reusability for testing and other for not passing the empty params again and again
   const CreateUserParams.empty() :
-   this(createdAt: '_empty.createdAt', name: '_empty.name', avatar : '_empty.avatark');
+   this(createdAt: '_empty.createdAt', name: '_empty.name', avatar : '_empty.avatar');
 
   final String createdAt;
   final String name;
