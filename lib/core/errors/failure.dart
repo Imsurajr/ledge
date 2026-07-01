@@ -6,6 +6,11 @@ abstract class Failure extends Equatable {
   final String message;
   final int statusCode;
 
+  String get errorMessage =>
+      '$statusCode'
+      'Error: '
+      '$message';
+
   @override
   List<Object> get props => [message, statusCode];
 }
@@ -16,5 +21,4 @@ class ServerFailure extends Failure {
   /// creating a reusable constructor for handling server error
   ServerFailure.fromException(ServerException e)
     : this(message: e.message, statusCode: e.statusCode);
-
 }
