@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:ledge/core/services/injection_container.dart';
 import 'package:logger/logger.dart';
 
-void main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await init();
   Logger logger = Logger();
   try {
     await dotenv.load(fileName: ".env");
