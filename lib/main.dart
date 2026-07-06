@@ -28,6 +28,7 @@ class MainApp extends StatelessWidget {
       // create: (context) => AuthCubit(createUser: createUser, getUsers: getUsers),
       create: (context) => sl<AuthCubit>(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
           visualDensity: VisualDensity.adaptivePlatformDensity,
