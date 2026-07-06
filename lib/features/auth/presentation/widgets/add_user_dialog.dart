@@ -23,10 +23,11 @@ class AddUserDialog extends StatelessWidget {
             children: [
               TextField(
                 controller: nameController,
-                decoration: InputDecoration(labelText: 'Enter Your Name'),
+                decoration: InputDecoration(labelText: 'Enter Your Name', labelStyle: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               ElevatedButton(
+                style: ButtonStyle(backgroundColor:WidgetStatePropertyAll(Colors.white)),
                 onPressed: () {
                   /// reading data from user i.e. name controller
                   const avatar =
@@ -40,7 +41,7 @@ class AddUserDialog extends StatelessWidget {
                   /// to close the dialog after adding user
                   Navigator.of(context).pop();
                 },
-                child: Text('Create User'),
+                child: Text('Create User', style: TextStyle(fontSize: 14,)),
               ),
             ],
           ),
