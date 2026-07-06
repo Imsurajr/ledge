@@ -46,6 +46,7 @@ class _HomescreenState extends State<Homescreen> {
       },
       builder: (context, state) {
         return Scaffold(
+          backgroundColor: Colors.white,
           /// state based messages
           body: state is GettingUsersState
               ? LoadingColumn(message: 'Fetching Users')
@@ -59,8 +60,8 @@ class _HomescreenState extends State<Homescreen> {
                       final user = state.users[index];
                       return ListTile(
                         leading: Image.network(user.avatar),
-                        title: Text(user.name),
-                        subtitle: Text(user.createdAt.substring(10)),
+                        title: Text(user.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                        subtitle: Text(user.createdAt.substring(10), style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),),
                       );
                     },
                     itemCount: state.users.length,
@@ -68,6 +69,7 @@ class _HomescreenState extends State<Homescreen> {
                 )
               : SizedBox.shrink(),
           floatingActionButton: FloatingActionButton.extended(
+            backgroundColor: Colors.white,
             onPressed: () async {
               await showDialog(
                 context: context,
